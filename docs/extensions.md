@@ -1,0 +1,5 @@
+- Review all features and compare with docker
+    - Orchestration
+    - Configuration (networking, storage, etc.)
+    - Metric Collection
+- Implements volumes
