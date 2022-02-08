@@ -3,3 +3,4 @@
     - Configuration (networking, storage, etc.)
     - Metric Collection
 - Implements volumes
+- publish package https://packaging.python.org/en/latest/tutorials/packaging-projects/
