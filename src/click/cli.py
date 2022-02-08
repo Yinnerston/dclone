@@ -16,13 +16,19 @@ from ..commands.stop import StopCommand
 def cli():
     """Click group
     """
-    pass
+    print("Click Group Init")
 
 ## TODO: ADD ARGS AND OPTIONS
 
-@cli.command()
-def run():
-    return RunCommand()
+@cli.command(help='Run a process in a container')
+@click.option('--image-name', '-i', help='Image name', default='ubuntu')
+@click.option('--image-dir', help='Images directory',
+              default='/images')
+@click.option('--container-dir', help='Containers directory',
+              default='/containers')
+@click.argument('Command', required=True, nargs=-1)
+def run(image_name, image_dir, container_dir, command):
+    return RunCommand(image_name, image_dir, container_dir, command)
 
 @cli.command()
 def build():

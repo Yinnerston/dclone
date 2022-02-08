@@ -4,5 +4,5 @@
 
 import src.click.cli as click_cli
 
-if __name__ == '__main':
+if __name__ == '__main__':
     click_cli.cli()

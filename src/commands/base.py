@@ -1,11 +1,14 @@
+from asyncio import subprocess
 import os
-from subprocess import check_call
+from subprocess import check_call, Popen
+
+from click import Command
 
 class BaseCommand():
     """Base for all other dclone commands.
     """
-    def __init__(self) -> None:
-        pass
+    def __init__(self, image_name, image_dir, container_dir, command) -> None:
+        self.run(image_name, image_dir, container_dir, command)
 
     def __mount_proc__(self, new_root: str):
         """ Call the mount syscall using the subprocess module
@@ -34,5 +37,8 @@ class BaseCommand():
         
         # ...
 
-    def run(*args):
-        pass
+
+    def run(self, image_name, image_dir, container_dir, command, *args, **kwargs):
+        # Get root path
+        # 
+        Popen(command)
