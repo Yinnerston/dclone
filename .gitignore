@@ -3,3 +3,4 @@ workspace.code-workspace
 containers
 dclone-venv
 __pycache__/
+*.pyc
