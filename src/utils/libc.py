@@ -15,3 +15,9 @@ class LibcWrapper():
         if ret < 0:
             errno = ctypes.get_errno()
             raise OSError(errno, f"Error mounting {source} ({fs}) on {target} with options '{options}': {os.strerror(errno)}")
+    
+    def unmount(device, options=0):
+        ret = ctypes.CDLL('libc.so.6', use_errno=True).umount2(device, options)
+        if ret < 0:
+            errno = ctypes.get_errno()
+            raise RuntimeError("Error umounting {} with options '{}': {}".format(device, options, os.strerror(errno)))
