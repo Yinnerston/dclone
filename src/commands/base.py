@@ -22,7 +22,7 @@ class BaseCommand():
         https://wiki.archlinux.org/title/Chroot#Using_chroot
         """
         # placeholder
-        return "/mnt/c/Users/natha/COMP/dclone/containers/tmp"
+        return os.path.join(os.getcwd(), "containers/tmp")
         # create root directory for the container by extrating an image into a new directory
 
         # chroot into new root directory
@@ -42,11 +42,16 @@ class BaseCommand():
         SYSFS_FLAGS = 0
         TMPFS_FLAGS = 0
         print(os.path.join(new_root, 'proc'))
-        # TODO: Use LibcWrapper.mount() https://stackoverflow.com/questions/1667257/how-do-i-mount-a-filesystem-using-python
-        # check_call(['mount', '-t', 'proc' '/proc', os.path.join(new_root, 'proc'), str(PROC_FLAGS), ''])
-        # check_call(['mount', '/sysfs', os.path.join(new_root, 'sysfs'), 'sysfs', str(SYSFS_FLAGS), ''])
-        # check_call(['mount', '/tmpfs', os.path.join(new_root, 'tmpfs'), 'tmpfs', str(TMPFS_FLAGS), 'mode=755'])
+        # https://stackoverflow.com/questions/1667257/how-do-i-mount-a-filesystem-using-python
+        LibcWrapper.mount('proc', '/proc', 'proc')
+        LibcWrapper.mount('sysfs', '/sysfs', 'sysfs')
+        LibcWrapper.mount('tmpfs', '/tmpfs', 'tmpfs')
         # Add devices
+        pass
+
+    def umount_all(self):
+        """
+        """
         pass
 
     def run(self, image_name, image_dir, container_dir, command, *args, **kwargs):
@@ -72,18 +77,19 @@ class BaseCommand():
                 print("PREEXEC_FN" , str(os.getpid()))
                 # check_call(['export', "TMP_HOSTNAME=" + container_id])
                 
-                # create mounts
-                self._create_mounts(new_root)
-                # TODO: Set uid to root=0 --> does this fix chroot permission?
-                # os.setuid(os.geteuid())
 
                 # Chroot
                 os.chroot(new_root) # TODO: MAke permissions work? How --> Look into changing uid/gid owner to cgroup?
                 # https://github.com/francisbouvier/cgroups/blob/762b8015380e002937b4bfb564e00f97d9a7c539/cgroups/user.py#L62 
+                # maybe teh reason it's not working is because not bind mounted?
                 
                 # chdir "/"
                 os.chdir('/')
-                # 
+
+                # create mounts
+                self._create_mounts(new_root)
+                # TODO: Set uid to root=0 --> does this fix chroot permission?
+                # os.setuid(os.geteuid())
             except Exception as e:
                 print(e)
                 import traceback
